@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
-import { StyleSheet, Button, Text, View , FlatList, Alert} from 'react-native';
+import { StyleSheet, Button, Text, View , FlatList, Alert,
+TouchableWithoutFeedback ,Keyboard} from 'react-native';
 import Header from './component/header';
 import TodoItem from './component/todoItems';
 import AddTodos from './component/addTodos';
@@ -18,46 +19,55 @@ export default function App() {
     setTodos((previousTodos) => {
       return previousTodos.filter( todo => todo.key != key);
     });
-    Alert.alert('Successfully Deleted');
+    Alert.alert('Successfully Deleted',text);
   }
 
   //made this todos here because state present in app.js not in addTodos comp.
   //...previousTodos this spread operator takes all previous state value
   const SubmitTodos =(text) =>{
 
-    setTodos((previousTodos) =>{
+    if(text.length >= 10){
+      setTodos((previousTodos) =>{
 
-      return[
-        {key: Math.random().toString() , text:text},
-        ...previousTodos
-      ];
-     
-    });
+        return[
+          {key: Math.random().toString() , text:text},
+          ...previousTodos,
+        ];
+       
+      });
+      Alert.alert("Successfully Add Todo",text);
+
+    }
+    
+    else{
+      Alert.alert("OOPS","Please type something valid")
+    }
 
   }
 
   return (
-    <View style={styles.container}>
-      <Header/>
-    <View style={styles.content}>
-      <AddTodos submission={SubmitTodos}/>
+//TouchableWithoutFeedback supports only one child
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Header/>
+          <View style={styles.content}>
+            <AddTodos submission={SubmitTodos}/>
 
-      <View style={styles.lists}>
-          <FlatList 
-          
-          data={todos}
-          renderItem={({ item }) => (
-          
-              <TodoItem listingItems={item} handler={DeleteTodos}/>
-            
-          )}
-          />
-          
+            <View style={styles.lists}>
+                <FlatList 
+                
+                data={todos}
+                renderItem={({ item }) => (
+                
+                    <TodoItem listingItems={item} handler={DeleteTodos}/>
+                  
+                )}
+                />
+                
+            </View>
       </View>
-
-    </View>
-    </View>
-    
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -73,3 +83,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+

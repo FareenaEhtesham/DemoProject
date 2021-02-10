@@ -5,7 +5,7 @@ export default function AddTodos({submission}){
 
     const [addTodos, setaddTodos] = useState('')
 
-    const Submission =(e) =>{
+    const ChangeHandler =(e) =>{
         setaddTodos(e);
         // console.log(e);
     }
@@ -15,7 +15,8 @@ export default function AddTodos({submission}){
             <TextInput
             style={styles.input}
             placeholder="Add Todos ...."
-            onChangeText={Submission}
+            value={addTodos}
+            onChangeText={ChangeHandler}
             />
 
             <Button color='coral' title="ADD TODO" 
